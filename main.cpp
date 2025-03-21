@@ -3,7 +3,6 @@
 #include <string>
 #include <iomanip>
 #include <algorithm>
-#include <limits> // For numeric_limits
 
 // Student class definition
 class Student {
@@ -61,36 +60,19 @@ void addStudent(std::vector<Student>& students) {
     int numGrades;
 
     std::cout << "\nEnter the student's name: ";
-    std::cin.ignore(); // To clear the input buffer before getting the name
+    std::cin.ignore(); // To clear the input buffer
     std::getline(std::cin, name);
 
     std::cout << "Enter the number of grades: ";
     std::cin >> numGrades;
 
-    // Validate the number of grades (must be a positive number)
-    while (numGrades <= 0) {
-        std::cout << "Please enter a valid number of grades (greater than 0): ";
-        std::cin >> numGrades;
-    }
-
-    // Clear any leftover newline character in the buffer
-    std::cin.ignore();
-
     std::vector<int> grades(numGrades);
     for (int i = 0; i < numGrades; ++i) {
         std::cout << "Enter grade " << (i + 1) << ": ";
         std::cin >> grades[i];
-
-        // Validate the input grade (must be a valid integer)
-        while (std::cin.fail() || grades[i] < 0 || grades[i] > 100) {
-            std::cin.clear(); // Clear the error flag
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignore incorrect input
-            std::cout << "Invalid input. Please enter a grade between 0 and 100: ";
-            std::cin >> grades[i];
-        }
     }
 
-    students.push_back(Student(name, grades)); // Add student to list
+    students.push_back(Student(name, grades));
 }
 
 // Main menu for the program
@@ -121,6 +103,7 @@ int main() {
             case 3:
                 sortStudentsByAverage(students);
                 std::cout << "\nStudents sorted by average grade.\n";
+                viewStudents(students);  // Display the sorted list
                 break;
             case 4:
                 std::cout << "Exiting program.\n";
